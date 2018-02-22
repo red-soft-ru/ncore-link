@@ -1,0 +1,27 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "lib": [
+            "dom",
+            "scripthost",
+            "es5",
+            "es2015.promise"
+        ],
+        "sourceMap": false,
+        "noImplicitAny": false,
+        "preserveConstEnums": false,
+        "emitDecoratorMetadata": false,
+        "experimentalDecorators": true,
+        "suppressImplicitAnyIndexErrors": true,
+        "strictNullChecks": true,
+        "noImplicitThis": true,
+        "outDir": "./lib"
+    },
+    "include": [
+        "./src/index.ts",
+        "./src/*"
+    ]
+}

@@ -49,7 +49,11 @@ ncoreLink.request({
         })
     },
     timeout(retry) {
-
+        snackbar({
+            text: 'Превышено время ожидания ответа от сервера',
+            actionText: 'Повторить',
+            action: retry
+        });
     }
 });
 ```
@@ -63,7 +67,7 @@ ncoreLink.request({
 |responseType|string|Тип ответа от сервера. json, text или ''|
 |body|any|Тело запроса|
 |header|object|Перечень HTTP заголовков|
-|abortActiveType|Применяется для проверки отсутствия дублирующих запросов с одинаковым типом. По умолчанию - true|
+|abortActiveType|boolean|Применяется для проверки отсутствия дублирующих запросов с одинаковым типом. По умолчанию - true|
 |type|string|При активном параметре abortActiveType прерывает активный запрос в очереди с указанным в этом параметре типом|
 |success|function|Функция, вызываемая при получении ответа от сервера с кодом 200|
 |error|function|Функция, вызываемая при получении ошибки|
@@ -71,12 +75,47 @@ ncoreLink.request({
 |include|string[]|Перечень значений параметра include для ncore API. Включает в ответ данные по связям|
 |fields|string[]|Перечень значений параметра fields для ncore API. Перечень полей объекта, запрашиваемый от API|
 
-# Формат ошибки NcoreLinkError
+# Типы данных
+
+## NcoreLinkError
 
 ``` typescript
 interface NcoreLinkError {
     code: number;
     status: string;
     text: string;  
+}
+```
+
+## NcoreLinkGlobalParams
+
+``` typescript
+export interface NcoreLinkGlobalParams {
+    baseUrl: string;
+    headers?: { [key: string]: string };
+    abortActiveType?: boolean;
+    onerror?: (error: NcoreLinkError) => void;
+    ontimeout?: (retry: () => void) => void;
+    timeout?: number;
+}
+```
+
+## NcoreLinkRequestParams
+
+``` typescript
+export interface NcoreLinkRequestParams {
+    url: string;
+    method?: string;
+    responseType?: XMLHttpRequestResponseType;
+    body?: any;
+    headers?: { [key: string]: string };
+    abortActiveType?: boolean;
+    type?: string;
+    timeout?: number;
+    include?: string[];
+    fields?: string[];
+    onsuccess?: (data: any) => void;
+    onerror?: (e: NcoreLinkError) => void;
+    ontimeout?: (retry: () => void) => void;
 }
 ```

@@ -60,7 +60,6 @@ export class NcoreLink {
 
             xhr.open(method || 'GET', this.genUrl(params), true);
             xhr.responseType = typeof responseType === 'string' ? responseType : 'json';
-            xhr.withCredentials = true;
             xhr.timeout = params.timeout || this.timeout;
 
             for (const header in headers) {
@@ -85,7 +84,6 @@ export class NcoreLink {
 
                 if (xhr.status === 200 && params.onsuccess) {
                     params.onsuccess(xhr.response);
-                    console.log(xhr);
                 } else {
                     finalError({
                         code: xhr.status,

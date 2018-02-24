@@ -38,17 +38,13 @@ import ncoreLink from 'ncore-link';
 ncoreLink.request({
     url: 'users',
     method: 'GET',
-    success(data) {
+    onsuccess(data) {
         that.setUsers(data);
     },
-    error(error) {
-        snackbar({
-            text: error.text,
-            actionText: 'Повторить',
-            action: send
-        })
+    onerror(error: NcoreLinkError) {
+        console.error(error.text);
     },
-    timeout(retry) {
+    ontimeout(retry) {
         snackbar({
             text: 'Превышено время ожидания ответа от сервера',
             actionText: 'Повторить',

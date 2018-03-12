@@ -82,7 +82,7 @@ export class NcoreLink {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== xhr.DONE) return;
 
-                if (xhr.status === 200 && params.onsuccess) {
+                if (/^2.+/.test(String(xhr.status)) && params.onsuccess) {
                     params.onsuccess(xhr.response);
                 } else {
                     finalError({

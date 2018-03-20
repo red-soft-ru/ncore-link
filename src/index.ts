@@ -141,11 +141,16 @@ export class NcoreLink {
             fields
         } = params;
 
-        let url = trim(this.baseUrl) + '/' + trim(params.url);
-
-        if (/^http.+/.test(params.url)) {
-            url = params.url;
-        }
+        let url = (() => {
+            
+            if (/^http.+/.test(params.url)) {
+                return params.url;
+            }
+            
+            const divider = params.url[0] === '/' ? '' : '/';
+            
+            return trim(this.baseUrl) + divider + params.url;
+        })();
 
         const queryParams: string[] = [];
 

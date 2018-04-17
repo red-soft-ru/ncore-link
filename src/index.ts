@@ -29,6 +29,11 @@ export class NcoreLink {
 
     request(params: NcoreLinkRequestParams) {
 
+        if (!params.url) {
+            console.error('Отсутвует URL запроса');
+            return;
+        }
+
         const {
             type,
             abortActiveType,

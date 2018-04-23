@@ -27,6 +27,33 @@ export class NcoreLink {
         }
     }
 
+    /*
+     * Promise версия request
+     */
+    async send(params: NcoreLinkRequestParams): Promise<any> {
+
+        return new Promise((resolve, reject) => {
+            
+            this.request({
+                ...params,
+                onsuccess(data) {
+                    resolve(data);
+
+                    if (params.onsuccess instanceof Function) {
+                        params.onsuccess(data);
+                    }
+                },
+                onerror(e) {
+                    reject(e);
+
+                    if (params.onerror instanceof Function) {
+                        params.onerror(e);
+                    }
+                }
+            })
+        })
+    }
+
     request(params: NcoreLinkRequestParams) {
 
         if (!params.url) {
@@ -87,6 +114,8 @@ export class NcoreLink {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== xhr.DONE) return;
 
+                console.log(xhr.readyState);
+
                 if (/^2.+/.test(String(xhr.status)) && params.onsuccess) {
                     params.onsuccess(xhr.response);
                 } else {
@@ -141,9 +170,14 @@ export class NcoreLink {
 
     private genUrl(params: NcoreLinkRequestParams): string {
 
+        if (!params.url) return '';
+
         const {
             include,
-            fields
+            fields,
+            offset,
+            count,
+            filters
         } = params;
 
         let url = (() => {
@@ -157,7 +191,7 @@ export class NcoreLink {
             return trim(this.baseUrl) + divider + params.url;
         })();
 
-        const queryParams: string[] = [];
+        let queryParams: string[] = [];
 
         if (include && include.length) {
             queryParams.push('@include=' + include.join(';'));
@@ -165,6 +199,19 @@ export class NcoreLink {
 
         if (fields && fields.length) {
             queryParams.push('@fields=' + fields.join(';'));
+        }
+
+        if (offset || offset === 0) {
+            queryParams.push('@offset=' + offset);
+        }
+
+        if (count) {
+            queryParams.push('@count=' + count);
+        }
+
+        if (filters && filters.length) {
+            queryParams = queryParams.concat(filters);
+            console.log(filters);
         }
 
         if (queryParams.length) {

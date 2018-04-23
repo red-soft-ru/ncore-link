@@ -17,7 +17,7 @@ export interface NcoreLinkGlobalParams {
 }
 
 export interface NcoreLinkRequestParams {
-    url: string;
+    url?: string;
     method?: string;
     responseType?: XMLHttpRequestResponseType;
     body?: any;
@@ -26,6 +26,10 @@ export interface NcoreLinkRequestParams {
     type?: string;
     timeout?: number;
     include?: string[];
+    offset?: number;
+    filters?: string[] | undefined;
+    count?: number;
+    debug?: boolean;
     fields?: string[];
     onsuccess?: (data: any) => void;
     onerror?: (e: NcoreLinkError) => void;

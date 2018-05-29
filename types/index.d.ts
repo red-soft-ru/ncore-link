@@ -31,7 +31,7 @@ export interface NcoreLinkRequestParams {
     count?: number;
     debug?: boolean;
     fields?: string[];
-    onsuccess?: (data: any) => void;
+    onsuccess?: (data: any, xhr: any) => void;
     onerror?: (e: NcoreLinkError) => void;
     ontimeout?: (retry: () => void) => void;
 }

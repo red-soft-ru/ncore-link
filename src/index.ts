@@ -36,11 +36,11 @@ export class NcoreLink {
             
             this.request({
                 ...params,
-                onsuccess(data) {
+                onsuccess(data, xhr) {
                     resolve(data);
 
                     if (params.onsuccess instanceof Function) {
-                        params.onsuccess(data);
+                        params.onsuccess(data, xhr);
                     }
                 },
                 onerror(e) {
@@ -114,10 +114,8 @@ export class NcoreLink {
             xhr.onreadystatechange = function () {
                 if (xhr.readyState !== xhr.DONE) return;
 
-                console.log(xhr.readyState);
-
                 if (/^2.+/.test(String(xhr.status)) && params.onsuccess) {
-                    params.onsuccess(xhr.response);
+                    params.onsuccess(xhr.response, xhr);
                 } else {
                     finalError({
                         code: xhr.status,

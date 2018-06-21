@@ -79,7 +79,6 @@ export class NcoreLink {
 
     const {
       type,
-      abortActiveType,
       responseType,
       method
     } = params;
@@ -89,10 +88,17 @@ export class NcoreLink {
     } = this;
 
     const that = this;
+    const abortActiveType = (() => {
+      if (params.abortActiveType === undefined) {
+        return this.abortActiveType;
+      } else {
+        return params.abortActiveType;
+      }
+    })();
 
     let timer;
 
-    if (type && (abortActiveType || this.abortActiveType)) {
+    if (type && abortActiveType) {
       this.abortRequestType(type);
     }
 
@@ -169,7 +175,7 @@ export class NcoreLink {
     });
   }
 
-  private abortRequestType(type: string) {
+  public abortRequestType(type: string | string[]) {
     this.requests.forEach((request) => {
       if (request.type === type) {
         request.xhr.abort();

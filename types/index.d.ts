@@ -10,6 +10,7 @@ declare global {
 export interface NcoreLinkGlobalParams {
     baseUrl?: string;
     headers?: { [key: string]: string };
+    abortRequestType?: (params: string | string[]) => void;
     abortActiveType?: boolean;
     onerror?: (error: NcoreLinkError) => void;
     ontimeout?: (retry: () => void) => void;

@@ -32,9 +32,9 @@ export interface NcoreLinkRequestParams {
     count?: number;
     debug?: boolean;
     fields?: string[];
-    onsuccess?: (data: any, xhr: any) => void;
-    onerror?: (e: NcoreLinkError) => void;
-    ontimeout?: (retry: () => void) => void;
+    onsuccess?: (data: any, xhr: XMLHttpRequest) => void;
+    onerror?: (e: NcoreLinkError, xhr: XMLHttpRequest) => void;
+    ontimeout?: (retry: () => void, xhr: XMLHttpRequest) => void;
 }
 
 export interface NcoreLinkError {

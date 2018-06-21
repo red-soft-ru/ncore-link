@@ -17,8 +17,8 @@ export class NcoreLink {
   headers: { [key: string]: string } = {};
   timeout: number = 10000;
 
-  onerror: (error: NcoreLinkError) => void;
-  ontimeout: (retry: () => void) => void;
+  onerror: (error: NcoreLinkError, xhr: XMLHttpRequest) => void;
+  ontimeout: (retry: () => void, xhr: XMLHttpRequest) => void;
 
   setParams(params: NcoreLinkGlobalParams) {
 
@@ -32,18 +32,18 @@ export class NcoreLink {
    */
   async async(params: NcoreLinkRequestParams) {
 
-    return new Promise<[any, any]>((resolve, reject) => {
+    return new Promise<[any, any, any]>((resolve, reject) => {
 
       this.request({
         ...params,
-        onsuccess(data) {
-          resolve([null, data]);
+        onsuccess(data, xhr) {
+          resolve([null, data, xhr]);
         },
-        onerror(err) {
-          resolve([err, null]);
+        onerror(err, xhr) {
+          resolve([err, null, xhr]);
         },
-        ontimeout(err) {
-          resolve([err, null]);
+        ontimeout(err, xhr) {
+          resolve([err, null, xhr]);
         }
       })
     })
@@ -120,14 +120,14 @@ export class NcoreLink {
         xhr.setRequestHeader(header, headers[header]);
       }
 
-      const finalError = (error: NcoreLinkError) => {
+      const finalError = (error: NcoreLinkError, xhr: XMLHttpRequest) => {
 
         if (params.onerror instanceof Function) {
-          params.onerror(error);
+          params.onerror(error, xhr);
         }
 
         if (that.onerror instanceof Function) {
-          that.onerror(error);
+          that.onerror(error, xhr);
         }
 
         this.removeRequest(request);
@@ -143,18 +143,18 @@ export class NcoreLink {
             code: xhr.status,
             status: xhr.statusText,
             text: xhr.responseType === 'json' ? '' : xhr.responseText
-          });
+          }, xhr);
         }
       };
 
       xhr.ontimeout = function () {
 
         if (params.ontimeout instanceof Function) {
-          params.ontimeout(send);
+          params.ontimeout(send, xhr);
         }
 
         if (this.ontimeout instanceof Function) {
-          that.ontimeout(send);
+          that.ontimeout(send, xhr);
         }
       }
 

@@ -17,8 +17,8 @@ export class NcoreLink {
   headers: { [key: string]: string } = {};
   timeout: number = 10000;
 
-  onerror: (error: NcoreLinkError, xhr: XMLHttpRequest) => void;
-  ontimeout: (retry: () => void, xhr: XMLHttpRequest) => void;
+  onerror!: (error: NcoreLinkError, xhr: XMLHttpRequest) => void;
+  ontimeout!: (retry: () => void, xhr: XMLHttpRequest) => void;
 
   setParams(params: NcoreLinkGlobalParams) {
 

@@ -31,9 +31,7 @@ export class NcoreLink {
    * Promise версия request
    */
   async async(params: NcoreLinkRequestParams) {
-
     return new Promise<[any, any, any]>((resolve, reject) => {
-
       this.request({
         ...params,
         onsuccess(data, xhr) {
@@ -229,8 +227,16 @@ export class NcoreLink {
       queryParams.push('@count=' + count);
     }
 
-    if (filters && filters.length) {
-      queryParams = queryParams.concat(filters);
+    if (filters) {
+
+      if (filters instanceof Array) {
+        queryParams = queryParams.concat(filters);
+      } else {
+        for (let fname in filters) {
+          const fval = `${fname}=${filters[fname]}`;
+          queryParams.push(fval);
+        }
+      }
     }
 
     if (queryParams.length) {

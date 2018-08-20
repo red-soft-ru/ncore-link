@@ -2,8 +2,8 @@
 import ncoreLinkInstance, { NcoreLink } from '../src/index';
 
 declare global {
-    interface Window { 
-        ncoreLink: NcoreLink; 
+    interface Window {
+        ncoreLink: NcoreLink;
     }
 }
 
@@ -28,7 +28,7 @@ export interface NcoreLinkRequestParams {
     timeout?: number;
     include?: string[];
     offset?: number;
-    filters?: string[] | undefined;
+    filters?: string[] | Record<string, string | number> | undefined;
     count?: number;
     debug?: boolean;
     fields?: string[];
@@ -40,7 +40,7 @@ export interface NcoreLinkRequestParams {
 export interface NcoreLinkError {
     code: number;
     status: string;
-    text: string;  
+    text: string;
 }
 
 export interface NcoreLinkRequest {

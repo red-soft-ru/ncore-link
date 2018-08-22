@@ -151,7 +151,7 @@ export class NcoreLink {
           params.ontimeout(send, xhr);
         }
 
-        if (this.ontimeout instanceof Function) {
+        if (that.ontimeout instanceof Function) {
           that.ontimeout(send, xhr);
         }
       }

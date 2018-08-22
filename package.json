@@ -1,6 +1,6 @@
 {
   "name": "ncore-link",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "NCore Javascript connector",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
@@ -10,6 +10,7 @@
     "index.js"
   ],
   "scripts": {
-    "dev": "tsc -p . -w"
+    "dev": "tsc -p . -w",
+    "build": "tsc -p ."
   }
 }

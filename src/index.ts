@@ -240,7 +240,8 @@ export class NcoreLink {
     }
 
     if (queryParams.length) {
-      url += '?' + queryParams.join('&');
+      const pfx = url.indexOf('?') < 0 ? '?' : '&';
+      url += pfx + queryParams.join('&');
     }
 
     return url;

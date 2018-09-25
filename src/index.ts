@@ -156,7 +156,9 @@ export class NcoreLink {
         }
       }
 
-      xhr.send(params.body);
+      const ensureBody = typeof params.body === 'string' ? params.body : JSON.stringify(params.body);
+
+      xhr.send(ensureBody);
       this.addRequest(request);
     }
 

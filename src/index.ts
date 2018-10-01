@@ -201,7 +201,6 @@ export class NcoreLink {
     } = params;
 
     let url = (() => {
-
       if (/^http.+/.test(params.url)) {
         return params.url;
       }
@@ -246,7 +245,7 @@ export class NcoreLink {
       url += pfx + queryParams.join('&');
     }
 
-    return url;
+    return encodeURI(url);
   }
 }
 

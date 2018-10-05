@@ -140,7 +140,7 @@ export class NcoreLink {
           finalError({
             code: xhr.status,
             status: xhr.statusText,
-            text: xhr.responseType === 'json' ? '' : xhr.responseText
+            text: (xhr.response && xhr.response.errorMessage) || xhr.responseText,
           }, xhr);
         }
       };

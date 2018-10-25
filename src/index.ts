@@ -3,15 +3,14 @@ import {
   NcoreLinkRequest,
   NcoreLinkGlobalParams,
   NcoreLinkError
-} from '../types';
+} from "../types";
 
 function trim(str: string) {
-  return str.replace(/^[\s\uFEFF\xA0\\/]+|[\s\uFEFF\xA0\\/]+$/g, '');
+  return str.replace(/^[\s\uFEFF\xA0\\/]+|[\s\uFEFF\xA0\\/]+$/g, "");
 }
 
 export class NcoreLink {
-
-  baseUrl: string = '';
+  baseUrl: string = "";
   requests: NcoreLinkRequest[] = [];
   abortActiveType: boolean = true;
   headers: { [key: string]: string } = {};
@@ -21,7 +20,6 @@ export class NcoreLink {
   ontimeout!: (retry: () => void, xhr: XMLHttpRequest) => void;
 
   setParams(params: NcoreLinkGlobalParams) {
-
     for (const param in params) {
       this[param] = params[param];
     }
@@ -43,47 +41,40 @@ export class NcoreLink {
         ontimeout(err, xhr) {
           resolve([err, null, xhr]);
         }
-      })
-    })
+      });
+    });
   }
 
   get(params) {
     return this.async({
       ...params,
-      method: 'GET'
-    })
+      method: "GET"
+    });
   }
 
   post(params) {
     return this.async({
       ...params,
-      method: 'POST'
-    })
+      method: "POST"
+    });
   }
 
   put(params) {
     return this.async({
       ...params,
-      method: 'PUT'
-    })
+      method: "PUT"
+    });
   }
 
   request(params: NcoreLinkRequestParams) {
-
     if (!params.url) {
-      console.error('Отсутвует URL запроса');
+      console.error("Отсутвует URL запроса");
       return;
     }
 
-    const {
-      type,
-      responseType,
-      method
-    } = params;
+    const { type, responseType, method } = params;
 
-    const {
-      baseUrl
-    } = this;
+    const { baseUrl } = this;
 
     const that = this;
     const abortActiveType = (() => {
@@ -101,7 +92,7 @@ export class NcoreLink {
     }
 
     const headers: object = {
-      'Content-Type': 'application/json; charset=UTF-8',
+      "Content-Type": "application/json; charset=UTF-8",
       ...this.headers,
       ...params.headers
     };
@@ -110,8 +101,9 @@ export class NcoreLink {
       const xhr: XMLHttpRequest = new XMLHttpRequest();
       const request = { type, xhr };
 
-      xhr.open(method || 'GET', this.genUrl(params), true);
-      xhr.responseType = typeof responseType === 'string' ? responseType : 'json';
+      xhr.open(method || "GET", this.genUrl(params), true);
+      xhr.responseType =
+        typeof responseType === "string" ? responseType : "json";
       xhr.timeout = params.timeout || this.timeout;
 
       for (const header in headers) {
@@ -119,7 +111,6 @@ export class NcoreLink {
       }
 
       const finalError = (error: NcoreLinkError, xhr: XMLHttpRequest) => {
-
         if (params.onerror instanceof Function) {
           params.onerror(error, xhr);
         }
@@ -137,16 +128,21 @@ export class NcoreLink {
         if (/^2.+/.test(String(xhr.status)) && params.onsuccess) {
           params.onsuccess(xhr.response, xhr);
         } else {
-          finalError({
-            code: xhr.status,
-            status: xhr.statusText,
-            text: (xhr.response && xhr.response.errorMessage) || xhr.responseText,
-          }, xhr);
+          finalError(
+            {
+              code: xhr.status,
+              status: xhr.statusText,
+              text:
+                /^(text)?$/.test(xhr.responseType)
+                  ? xhr.responseText
+                  : xhr.response && xhr.response.errorMessage,
+            },
+            xhr
+          );
         }
       };
 
       xhr.ontimeout = function () {
-
         if (params.ontimeout instanceof Function) {
           params.ontimeout(send, xhr);
         }
@@ -154,13 +150,16 @@ export class NcoreLink {
         if (that.ontimeout instanceof Function) {
           that.ontimeout(send, xhr);
         }
-      }
+      };
 
-      const ensureBody = typeof params.body === 'string' ? params.body : JSON.stringify(params.body);
+      const ensureBody =
+        typeof params.body === "string"
+          ? params.body
+          : JSON.stringify(params.body);
 
       xhr.send(ensureBody);
       this.addRequest(request);
-    }
+    };
 
     send();
   }
@@ -170,13 +169,13 @@ export class NcoreLink {
   }
 
   private abortRequests(): void {
-    this.requests.forEach((request) => {
+    this.requests.forEach(request => {
       request.xhr.abort();
     });
   }
 
   public abortRequestType(type: string | string[]) {
-    this.requests.forEach((request) => {
+    this.requests.forEach(request => {
       if (request.type === type) {
         request.xhr.abort();
       }
@@ -189,23 +188,16 @@ export class NcoreLink {
   }
 
   private genUrl(params: NcoreLinkRequestParams): string {
+    if (!params.url) return "";
 
-    if (!params.url) return '';
-
-    const {
-      include,
-      fields,
-      offset,
-      count,
-      filters
-    } = params;
+    const { include, fields, offset, count, filters } = params;
 
     let url = (() => {
       if (/^http.+/.test(params.url)) {
         return params.url;
       }
 
-      const divider = params.url[0] === '/' ? '' : '/';
+      const divider = params.url[0] === "/" ? "" : "/";
 
       return trim(this.baseUrl) + divider + params.url;
     })();
@@ -213,23 +205,22 @@ export class NcoreLink {
     let queryParams: string[] = [];
 
     if (include && include.length) {
-      queryParams.push('@include=' + include.join(';'));
+      queryParams.push("@include=" + include.join(";"));
     }
 
     if (fields && fields.length) {
-      queryParams.push('@fields=' + fields.join(';'));
+      queryParams.push("@fields=" + fields.join(";"));
     }
 
     if (offset || offset === 0) {
-      queryParams.push('@offset=' + offset);
+      queryParams.push("@offset=" + offset);
     }
 
     if (count) {
-      queryParams.push('@count=' + count);
+      queryParams.push("@count=" + count);
     }
 
     if (filters) {
-
       if (filters instanceof Array) {
         queryParams = queryParams.concat(filters);
       } else {
@@ -241,8 +232,8 @@ export class NcoreLink {
     }
 
     if (queryParams.length) {
-      const pfx = url.indexOf('?') < 0 ? '?' : '&';
-      url += pfx + queryParams.join('&');
+      const pfx = url.indexOf("?") < 0 ? "?" : "&";
+      url += pfx + queryParams.join("&");
     }
 
     return encodeURI(url);

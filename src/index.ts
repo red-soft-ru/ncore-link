@@ -39,8 +39,13 @@ export class NcoreLink {
           resolve([err, null, xhr]);
         },
         ontimeout(err, xhr) {
-          resolve([err, null, xhr]);
-        }
+          const error = {
+            code: 408,
+            status: 'timeout',
+            text: 'Превышено время ожидания ответа от сервера',
+          }
+          resolve([error, null, xhr]);
+        },
       });
     });
   }

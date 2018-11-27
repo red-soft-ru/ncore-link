@@ -158,7 +158,7 @@ export class NcoreLink {
       };
 
       const ensureBody =
-        typeof params.body === "string"
+        typeof params.body === "string" || (params.body && params.body.type === 'application/octet-stream')
           ? params.body
           : JSON.stringify(params.body);
 

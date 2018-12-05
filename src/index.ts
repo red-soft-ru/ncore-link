@@ -158,7 +158,7 @@ export class NcoreLink {
       };
 
       const ensureBody =
-        typeof params.body === "string" || (params.body && params.body.type === 'application/octet-stream')
+        typeof params.body === "string" || this.isBlob(params.body)
           ? params.body
           : JSON.stringify(params.body);
 
@@ -167,6 +167,10 @@ export class NcoreLink {
     };
 
     send();
+  }
+
+  private isBlob(x): boolean {
+    return x instanceof Blob || toString.call(x) === '[object Blob]';
   }
 
   private addRequest(request: NcoreLinkRequest): void {

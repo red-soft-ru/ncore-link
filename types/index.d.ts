@@ -15,6 +15,7 @@ export interface NcoreLinkGlobalParams {
     onerror?: (error: NcoreLinkError) => void;
     ontimeout?: (retry: () => void) => void;
     timeout?: number;
+    withCredentials?: boolean;
 }
 
 export interface NcoreLinkRequestParams {

@@ -15,6 +15,7 @@ export class NcoreLink {
   abortActiveType: boolean = true;
   headers: { [key: string]: string } = {};
   timeout: number = 10000;
+  withCredentials: boolean = false;
 
   onerror!: (error: NcoreLinkError, xhr: XMLHttpRequest) => void;
   ontimeout!: (retry: () => void, xhr: XMLHttpRequest) => void;
@@ -110,7 +111,8 @@ export class NcoreLink {
       xhr.responseType =
         typeof responseType === "string" ? responseType : "json";
       xhr.timeout = params.timeout || this.timeout;
-
+      xhr.withCredentials = this.withCredentials;
+      
       for (const header in headers) {
         xhr.setRequestHeader(header, headers[header]);
       }

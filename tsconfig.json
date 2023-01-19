@@ -2,7 +2,8 @@
     "compileOnSave": true,
     "compilerOptions": {
         "target": "es5",
-        "module": "commonjs",
+        // "module": "commonjs",
+        "module": "esnext",
         "moduleResolution": "node",
         "lib": [
             "dom",

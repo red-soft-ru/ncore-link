@@ -8,6 +8,7 @@
 |headers|object|HTTP заголовки|
 |abortActiveType|boolean|Применяется для проверки отсутствия дублирующих запросов с одинаковым типом. По умолчанию - true|
 |timeout|number|Время ожидания ответа от сервера|
+|withCredentials|boolean|Оправка авторизационных данных (в частности cookie) при CORS. По умолчанию - false|
 |onerror|function|Функция, вызываемая при ошибке в каждом запросе|
 |ontimeout|function|Функция, вызываемая при принудительном завершении запроса по истечении времени|
 
@@ -94,6 +95,7 @@ export interface NcoreLinkGlobalParams {
     onerror?: (error: NcoreLinkError) => void;
     ontimeout?: (retry: () => void) => void;
     timeout?: number;
+    withCredentials?: boolean;
 }
 ```
 

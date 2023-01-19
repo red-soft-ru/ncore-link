@@ -1,6 +1,6 @@
 {
   "name": "ncore-link",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "NCore Javascript connector",
   "main": "lib/index.js",
   "typings": "types/index.d.ts",
